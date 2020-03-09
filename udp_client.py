@@ -8,22 +8,26 @@ target_port = 69
 
 client.bind(("0.0.0.0", 69))
 
-def handle_incoming(message):
-    print(message.decode())
+def handle_incoming(message, name):
+    msg = message.decode()
+    if(name + '>' in msg):
+        pass
+    else:
+        print(msg)
 
 def await_messages():
     while True:
         message, addr = client.recvfrom(4096)
-        threading.Thread(target=handle_incoming, args=(message,)).start()
+        threading.Thread(target=handle_incoming, args=(message,name,)).start()
 
-# Sign into the server.
 name = input("What is your name?\t")
-msg = "I am " +str(name)
+msg = str(name) + " has joined the chat!"
 client.sendto(msg.encode(),(target_ip,target_port))
 
 waiter = threading.Thread(target=await_messages)
 waiter.daemon = True
 waiter.start()
+
 while True:
     msg = input()
     formatted = name + "> " + msg
