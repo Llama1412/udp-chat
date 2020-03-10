@@ -4,7 +4,6 @@ import base64
 import hashlib
 
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-ticker = 0
 
 target_ip = "192.168.1.255"
 target_port = 69
@@ -12,6 +11,7 @@ target_port = 69
 client.bind(("0.0.0.0", 69))
 
 def handle_incoming(message, namDome, addr):
+    ticker = 0
     msg = message.decode()
     if name + '>' in msg:
         pass
@@ -19,7 +19,7 @@ def handle_incoming(message, namDome, addr):
         splitup = msg.split(">")[1]
         trimmed = splitup[6:]
         decoded = base64.b64decode(trimmed)
-        with open("files/ticker", "wb") as file:
+        with open("files/"+ticker, "wb") as file:
             file.write(decoded)
         print("Received a file from " + str(addr[0]) + ". Naming " + str(ticker))
         ticker += 1
